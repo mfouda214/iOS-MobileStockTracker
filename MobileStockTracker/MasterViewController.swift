@@ -8,29 +8,42 @@
 
 import UIKit
 import CoreData
+import FrostedSidebar
 
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
-
+    
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
-
+    
+    var frostedSidebar: FrostedSidebar = FrostedSidebar(itemImages:  [
+        UIImage(named: "star")!,
+        UIImage(named: "profile")!,
+        UIImage(named: "globe")!,
+        UIImage(named: "gear")!], colors: nil , selectionStyle: .single)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        navigationItem.leftBarButtonItem = editButtonItem
-
+        
+        let burgerbutton = UIBarButtonItem(image: UIImage(named: "burger"), style: .plain, target: self, action: #selector(onBurger(_:)))
+        navigationItem.leftBarButtonItems = [burgerbutton,editButtonItem]
+        
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        
+        // burger sidebar
+        handleBurger()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
+        
+        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,6 +51,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - Buttons
+    
     @objc
     func insertNewObject(_ sender: Any) {
         let context = self.fetchedResultsController.managedObjectContext
@@ -49,6 +64,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             newItem.name = nameInput.text!
             newItem.checked = false
+            newItem.timestamp = Date()
+            // Save the context.
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
         }
         
         alert.addAction(action)
@@ -61,19 +86,39 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // End Try
 
         // If appropriate, configure the new managed object.
-        newItem.timestamp = Date()
-        
-        // Save the context.
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
+//        newItem.timestamp = Date()
+//
+//        // Save the context.
+//        do {
+//            try context.save()
+//        } catch {
+//            // Replace this implementation with code to handle the error appropriately.
+//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            let nserror = error as NSError
+//            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//        }
     }
 
+    // When BugerSideBar button Tapped
+    @objc
+    func onBurger(_ sender: Any){
+        
+        frostedSidebar.showInViewController(self, animated: true)
+        
+    }
+    
+    // HandleBurger Actions
+    func handleBurger(){
+        
+        frostedSidebar.adjustForNavigationBar = true
+        
+        frostedSidebar.actionForIndex = [
+            0: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) },
+            1: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) },
+            2: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) },
+            7: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) }]
+    }
+    
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -128,7 +173,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(_ cell: UITableViewCell, withitem item: Item) {
-        cell.textLabel!.text = item.name
+        cell.textLabel!.text = item.name //item.timestamp?.description
     }
 
     // MARK: - Fetched results controller
