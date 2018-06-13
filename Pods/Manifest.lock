@@ -1,0 +1,16 @@
+PODS:
+  - FrostedSidebar (1.0.0)
+
+DEPENDENCIES:
+  - FrostedSidebar
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - FrostedSidebar
+
+SPEC CHECKSUMS:
+  FrostedSidebar: f86c6843cabd5d456f9234afb6eea22a7512532f
+
+PODFILE CHECKSUM: ae668490d4be386abde6e4f3160b62031b16fc90
+
+COCOAPODS: 1.5.2
