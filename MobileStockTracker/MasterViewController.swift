@@ -15,21 +15,29 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     
+    let rowHeight: CGFloat = 75
+    
     var frostedSidebar: FrostedSidebar = FrostedSidebar(itemImages:  [
         UIImage(named: "star")!,
         UIImage(named: "profile")!,
         UIImage(named: "globe")!,
         UIImage(named: "gear")!], colors: nil , selectionStyle: .single)
 
+    
+    
+    // MARK: - View
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        tableView.rowHeight = rowHeight
+        
         let burgerbutton = UIBarButtonItem(image: UIImage(named: "burger"), style: .plain, target: self, action: #selector(onBurger(_:)))
         navigationItem.leftBarButtonItems = [burgerbutton,editButtonItem]
         
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        navigationItem.rightBarButtonItem = addButton
+//        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
+//        navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -53,27 +61,55 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     // MARK: - Buttons
     
-    @objc
-    func insertNewObject(_ sender: Any) {
+    @IBAction func addItem(_ sender: UIBarButtonItem) {
+        
+//        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//        let viewController = storyboard.instantiateViewController(withIdentifier: "AddItem")
+//
+//        viewController.modalPresentationStyle = .popover
+//        let popover: UIPopoverPresentationController = viewController.popoverPresentationController!
+//        popover.barButtonItem = sender as? UIBarButtonItem
+//        popover.delegate = self as? UIPopoverPresentationControllerDelegate
+//        present(viewController, animated: true, completion:nil)
+//
         let context = self.fetchedResultsController.managedObjectContext
         let newItem = Item(context: context)
-        
-        // Try alert
+
+        // Alert
         var nameInput = UITextField()
         let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             newItem.name = nameInput.text!
             newItem.checked = false
             newItem.timestamp = Date()
-            // Save the context.
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            self.save()
+        }
+
+        alert.addAction(action)
+        alert.addTextField { (field) in
+            nameInput = field
+            nameInput.placeholder = "Add name for new item"
+        }
+
+        present(alert, animated: true)
+        // END ALert
+
+        
+    }
+    
+    @objc
+    func insertNewObject(_ sender: Any) {
+        let context = self.fetchedResultsController.managedObjectContext
+        let newItem = Item(context: context)
+        
+        // Alert
+        var nameInput = UITextField()
+        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            newItem.name = nameInput.text!
+            newItem.checked = false
+            newItem.timestamp = Date()
+            self.save()
         }
         
         alert.addAction(action)
@@ -83,20 +119,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         present(alert, animated: true)
-        // End Try
+        // END ALert
 
-        // If appropriate, configure the new managed object.
-//        newItem.timestamp = Date()
-//
-//        // Save the context.
-//        do {
-//            try context.save()
-//        } catch {
-//            // Replace this implementation with code to handle the error appropriately.
-//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//            let nserror = error as NSError
-//            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//        }
     }
 
     // When BugerSideBar button Tapped
@@ -116,7 +140,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             0: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) },
             1: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) },
             2: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) },
-            7: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) }]
+            3: {self.frostedSidebar.dismissAnimated(true, completion: { finished in self.insertNewObject((Any).self)}) }]
     }
     
     // MARK: - Segues
@@ -131,6 +155,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
+        
+        if segue.identifier == "AddItem" {
+            let nav = segue.destination as! UINavigationController
+            let controller = nav.topViewController as! NewItemViewController
+            controller.managedObjectContext = managedObjectContext
+        } 
     }
 
     // MARK: - Table View
@@ -173,7 +203,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(_ cell: UITableViewCell, withitem item: Item) {
-        cell.textLabel!.text = item.name //item.timestamp?.description
+        cell.textLabel!.text = item.name
+        cell.detailTextLabel!.text = item.timestamp?.description
     }
 
     // MARK: - Fetched results controller
@@ -253,6 +284,19 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
          tableView.reloadData()
      }
      */
+    
+    // Save the context.
+    func save(){
+        do {
+            try managedObjectContext?.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
+
 
 }
 

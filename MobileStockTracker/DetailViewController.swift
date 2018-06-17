@@ -39,6 +39,18 @@ class DetailViewController: UIViewController {
             configureView()
         }
     }
+    
+    // MARK: - Segues
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "EditItem" {
+            let nav = segue.destination as! UINavigationController
+            let controller = nav.topViewController as! NewItemViewController
+            controller.managedObjectContext = detailItem?.managedObjectContext
+            controller.ItemToEdit = self.detailItem!
+            
+        }
+    }
 
 
 }
