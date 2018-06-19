@@ -37,9 +37,9 @@ class DetailViewController: UIViewController, NSFetchedResultsControllerDelegate
             ItemDateLabel?.text = detail.timestamp!.description
             itemBarcodeLabel?.text = detail.barcode
             
-            ItemNameLabel?.isEnabled = true
-            ItemDateLabel?.isEnabled = true
-            itemBarcodeLabel?.isEnabled = true
+            ItemNameLabel?.isHidden = false
+            ItemDateLabel?.isHidden = false
+            itemBarcodeLabel?.isHidden = false
 
         }
     }
@@ -47,6 +47,10 @@ class DetailViewController: UIViewController, NSFetchedResultsControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        ItemNameLabel?.isHidden = true
+        ItemDateLabel?.isHidden = true
+        itemBarcodeLabel?.isHidden = true
+        
         configureView()
     }
 

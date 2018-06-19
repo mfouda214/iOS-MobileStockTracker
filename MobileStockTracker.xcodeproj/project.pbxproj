@@ -15,6 +15,7 @@
 		D450148B20D0974A00034C85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D450148920D0974A00034C85 /* Main.storyboard */; };
 		D450148D20D0974C00034C85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D450148C20D0974C00034C85 /* Assets.xcassets */; };
 		D450149020D0974C00034C85 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D450148E20D0974C00034C85 /* LaunchScreen.storyboard */; };
+		D4A25DD320D9A8F20067035B /* QRScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A25DD220D9A8F20067035B /* QRScannerController.swift */; };
 		EEF4D1344A2113A63E92C3DE /* Pods_MobileStockTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DD38BDF82513A7626634991 /* Pods_MobileStockTracker.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 		D450148C20D0974C00034C85 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D450148F20D0974C00034C85 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D450149120D0974C00034C85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4A25DD220D9A8F20067035B /* QRScannerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				D450148720D0974A00034C85 /* DetailViewController.swift */,
 				D450148520D0974A00034C85 /* MasterViewController.swift */,
 				D4028E2E20D5D6910040AC6A /* NewItemViewController.swift */,
+				D4A25DD220D9A8F20067035B /* QRScannerController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 				D4028E2F20D5D6910040AC6A /* NewItemViewController.swift in Sources */,
 				D450148620D0974A00034C85 /* MasterViewController.swift in Sources */,
 				D450148820D0974A00034C85 /* DetailViewController.swift in Sources */,
+				D4A25DD320D9A8F20067035B /* QRScannerController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

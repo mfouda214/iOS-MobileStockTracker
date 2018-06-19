@@ -89,7 +89,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             newItem.name = nameInput.text!
-            newItem.checked = false
+            newItem.barcode = ""
             newItem.timestamp = Date()
             self.save()
         }
@@ -116,7 +116,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             newItem.name = nameInput.text!
-            newItem.checked = false
             newItem.timestamp = Date()
             self.save()
         }
