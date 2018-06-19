@@ -19,7 +19,17 @@ protocol NewItemDelegate: class {
     func newItemView(_ controller: NewItemViewController, didFinishAdding item: Item)
 }
 
-class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegate, UITextFieldDelegate {
+class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegate, UITextFieldDelegate, EditBarcode {
+    func changeBarcodeCanceled(_ controller: QRScannerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
+    func changeBarcode(_ controller: QRScannerController, didFinishEditing scannedBarcode: String) {
+        BarcodeNameTextField.text = scannedBarcode
+        dismiss(animated: true, completion: nil)
+    }
+    
 
     var managedObjectContext: NSManagedObjectContext? = nil
     var ItemToEdit: Item? = nil
@@ -54,6 +64,7 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
     }
     
 
+
     
     @IBAction func cancel(_ sender: Any) {
         delegate?.newItemViewDidCancel(self)
@@ -77,6 +88,16 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
         
     }
     
+    
+    // MARK: - Segues
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "scan" {
+            let nav = segue.destination as! UINavigationController
+            let controller = nav.topViewController as! QRScannerController
+            controller.delegate = self
+        }
+    }
     
     // Save the context.
     func save(){
