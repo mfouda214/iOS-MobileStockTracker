@@ -25,16 +25,22 @@ class DetailViewController: UIViewController, NSFetchedResultsControllerDelegate
     }
     
     
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
-    
-
+    @IBOutlet weak var ItemDateLabel: UILabel!
+    @IBOutlet weak var ItemNameLabel: UILabel!
+    @IBOutlet weak var itemBarcodeLabel: UILabel!
     
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = detailItem {
-            if let label = detailDescriptionLabel {
-                label.text = detail.timestamp!.description
-            }
+
+            ItemNameLabel?.text = detail.name
+            ItemDateLabel?.text = detail.timestamp!.description
+            itemBarcodeLabel?.text = detail.barcode
+            
+            ItemNameLabel?.isEnabled = true
+            ItemDateLabel?.isEnabled = true
+            itemBarcodeLabel?.isEnabled = true
+
         }
     }
 

@@ -27,7 +27,8 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
     weak var delegate: NewItemDelegate?
     weak var delegateEdit: EditItemDelegate?
     
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var NameTextField: UITextField!
+    @IBOutlet weak var BarcodeNameTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,14 +37,15 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
 
         if let item = ItemToEdit {
             title = "Edit Item"
-            textField.text = item.name
+            NameTextField.text = item.name
+            BarcodeNameTextField.text = item.barcode
         }
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        textField.becomeFirstResponder()
+        NameTextField.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,14 +62,16 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
     
     @IBAction func Done(_ sender: UIBarButtonItem) {
         if let item = ItemToEdit {
-            item.name = textField.text!
+            item.name = NameTextField.text!
             item.timestamp = Date()
+            item.barcode = BarcodeNameTextField.text!
             self.save()
             delegateEdit?.newItemView(self, didFinishEditing: item)
         } else {
             let item = NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext!) as! Item
-            item.name = textField.text!
+            item.name = NameTextField.text!
             item.timestamp = Date()
+            item.barcode = BarcodeNameTextField.text!
             delegate?.newItemView(self, didFinishAdding: item)
         }
         
