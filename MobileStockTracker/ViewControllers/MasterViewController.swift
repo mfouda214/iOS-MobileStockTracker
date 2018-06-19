@@ -10,12 +10,21 @@ import UIKit
 import CoreData
 import FrostedSidebar
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NewItemDelegate {
+  
+    func newItemViewDidCancel(_ controller: NewItemViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func newItemView(_ controller: NewItemViewController, didFinishAdding item: Item) {
+        save()
+        dismiss(animated: true, completion: nil)
+    }
     
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     
-    let rowHeight: CGFloat = 75
+    let rowHeight: CGFloat = 55
     
     var frostedSidebar: FrostedSidebar = FrostedSidebar(itemImages:  [
         UIImage(named: "star")!,
@@ -154,17 +163,19 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
-        }
         
-        if segue.identifier == "AddItem" {
+        } else if segue.identifier == "AddItem" {
             let nav = segue.destination as! UINavigationController
             let controller = nav.topViewController as! NewItemViewController
+            controller.delegate = self
             controller.managedObjectContext = managedObjectContext
+            
         } 
     }
 
+    
     // MARK: - Table View
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedResultsController.sections?.count ?? 0
     }
@@ -203,8 +214,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(_ cell: UITableViewCell, withitem item: Item) {
-        cell.textLabel!.text = item.name
-        cell.detailTextLabel!.text = item.timestamp?.description
+        let HeadLabel = cell.viewWithTag(1000) as! UILabel
+        let DateLabel = cell.viewWithTag(2000) as! UILabel
+        HeadLabel.text = item.name
+        DateLabel.text = item.timestamp?.description
+        cell.accessoryType = .disclosureIndicator
     }
 
     // MARK: - Fetched results controller

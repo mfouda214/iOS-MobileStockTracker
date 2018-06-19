@@ -85,16 +85,24 @@
 			isa = PBXGroup;
 			children = (
 				D450148020D0974A00034C85 /* AppDelegate.swift */,
-				D450148720D0974A00034C85 /* DetailViewController.swift */,
-				D450148520D0974A00034C85 /* MasterViewController.swift */,
+				D4C15E6B20D9790300F89AF7 /* ViewControllers */,
 				D450148920D0974A00034C85 /* Main.storyboard */,
-				D4028E2E20D5D6910040AC6A /* NewItemViewController.swift */,
 				D450148C20D0974C00034C85 /* Assets.xcassets */,
 				D450148E20D0974C00034C85 /* LaunchScreen.storyboard */,
 				D450149120D0974C00034C85 /* Info.plist */,
 				D450148220D0974A00034C85 /* MobileStockTracker.xcdatamodeld */,
 			);
 			path = MobileStockTracker;
+			sourceTree = "<group>";
+		};
+		D4C15E6B20D9790300F89AF7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D450148720D0974A00034C85 /* DetailViewController.swift */,
+				D450148520D0974A00034C85 /* MasterViewController.swift */,
+				D4028E2E20D5D6910040AC6A /* NewItemViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

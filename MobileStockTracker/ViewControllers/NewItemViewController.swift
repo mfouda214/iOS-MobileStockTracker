@@ -9,10 +9,23 @@
 import UIKit
 import CoreData
 
+protocol EditItemDelegate: class {
+    func newItemViewDidCancel(_ controller: NewItemViewController)
+    func newItemView(_ controller: NewItemViewController, didFinishEditing item: Item)
+}
+
+protocol NewItemDelegate: class {
+    func newItemViewDidCancel(_ controller: NewItemViewController)
+    func newItemView(_ controller: NewItemViewController, didFinishAdding item: Item)
+}
+
 class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegate, UITextFieldDelegate {
 
     var managedObjectContext: NSManagedObjectContext? = nil
     var ItemToEdit: Item? = nil
+    
+    weak var delegate: NewItemDelegate?
+    weak var delegateEdit: EditItemDelegate?
     
     @IBOutlet weak var textField: UITextField!
     
@@ -41,9 +54,8 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
 
     
     @IBAction func cancel(_ sender: Any) {
-        
-        dismiss(animated: true, completion: nil)
-        
+        delegate?.newItemViewDidCancel(self)
+        delegateEdit?.newItemViewDidCancel(self)
     }
     
     @IBAction func Done(_ sender: UIBarButtonItem) {
@@ -51,15 +63,16 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
             item.name = textField.text!
             item.timestamp = Date()
             self.save()
+            delegateEdit?.newItemView(self, didFinishEditing: item)
         } else {
             let item = NSEntityDescription.insertNewObject(forEntityName: "Item", into: managedObjectContext!) as! Item
             item.name = textField.text!
             item.timestamp = Date()
-            self.save()
+            delegate?.newItemView(self, didFinishAdding: item)
         }
-        dismiss(animated: true, completion: nil)
         
     }
+    
     
     // Save the context.
     func save(){
@@ -72,6 +85,5 @@ class NewItemViewController: UIViewController, NSFetchedResultsControllerDelegat
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }
-
-
+    
 }
