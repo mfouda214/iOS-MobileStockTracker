@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -200,7 +201,6 @@
         <!--New Item View Controller-->
         <scene sceneID="7Qt-tY-atS">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bbs-XI-LFE" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="oY0-1y-6TE" customClass="NewItemViewController" customModule="MobileStockTracker" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AWD-sF-8jY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -259,17 +259,27 @@
                                 <action selector="cancel:" destination="oY0-1y-6TE" id="SVR-h3-Gf9"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="aV9-zP-Ajb">
-                            <connections>
-                                <action selector="Done:" destination="oY0-1y-6TE" id="Jok-N1-yhX"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="done" id="aV9-zP-Ajb">
+                                <connections>
+                                    <action selector="Done:" destination="oY0-1y-6TE" id="Jok-N1-yhX"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="SCAN" id="vhd-QN-WAa">
+                                <connections>
+                                    <segue destination="JJS-mX-KgS" kind="popoverPresentation" identifier="scan" popoverAnchorBarButtonItem="vhd-QN-WAa" id="oy3-rO-SaL">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="BarcodeNameTextField" destination="UFz-jI-wj9" id="Yha-3l-UBa"/>
                         <outlet property="NameTextField" destination="0Ch-5Z-Kae" id="iOs-7Q-aPD"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bbs-XI-LFE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2908" y="-304"/>
         </scene>
@@ -307,7 +317,84 @@
             </objects>
             <point key="canvasLocation" x="1969" y="-304"/>
         </scene>
+        <!--Scan-->
+        <scene sceneID="HRl-HA-tsN">
+            <objects>
+                <viewController storyboardIdentifier="scan" id="9eh-I6-YJE" customClass="QRScannerController" customModule="MobileStockTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jvq-ez-yA2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.60000002384185791" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No QR code is detected" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hfG-ZQ-CE0">
+                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="RlP-zT-3d8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRQ-Ni-dqI">
+                                <rect key="frame" x="141" y="123" width="18" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="18" id="47n-CV-e7r"/>
+                                    <constraint firstAttribute="height" constant="18" id="8DP-cs-942"/>
+                                    <constraint firstAttribute="width" constant="18" id="Pad-80-Bde"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" image="cross"/>
+                                <connections>
+                                    <action selector="CrossPressed:" destination="9eh-I6-YJE" eventType="touchUpInside" id="QLS-MI-kEc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="4Zl-LF-H4K" firstAttribute="bottom" secondItem="hfG-ZQ-CE0" secondAttribute="bottom" id="7yx-Q9-GuQ"/>
+                            <constraint firstItem="4Zl-LF-H4K" firstAttribute="trailing" secondItem="hfG-ZQ-CE0" secondAttribute="trailing" id="DDK-j3-Zuy"/>
+                            <constraint firstItem="hfG-ZQ-CE0" firstAttribute="leading" secondItem="4Zl-LF-H4K" secondAttribute="leading" id="NGj-Aq-OPA"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4Zl-LF-H4K"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Scan" id="l1Y-gh-3dn">
+                        <barButtonItem key="leftBarButtonItem" image="cross" id="rir-QR-1EN">
+                            <inset key="imageInsets" minX="-15" minY="-5" maxX="0.0" maxY="-15"/>
+                            <connections>
+                                <action selector="CrossPressed:" destination="9eh-I6-YJE" id="oIQ-QW-Rgf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="messageLabel" destination="hfG-ZQ-CE0" id="amQ-fd-gHw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IOy-Jg-s2o" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4648.8000000000002" y="-304.4977511244378"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="UbP-V9-WT8">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JJS-mX-KgS" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="blackTranslucent" id="KnA-k2-FA8">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="9eh-I6-YJE" kind="relationship" relationship="rootViewController" id="5XC-Z1-gN5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TtJ-gV-wM2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3709.5999999999999" y="-304.4977511244378"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="cross" width="40" height="40"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="6x1-2t-IZW"/>
         <segue reference="6S0-TO-JiA"/>
